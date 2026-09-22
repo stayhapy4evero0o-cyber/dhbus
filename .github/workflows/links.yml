@@ -1,0 +1,21 @@
+name: School Project Build
+on: [push, workflow_dispatch]
+
+jobs:
+  run-project:
+    runs-on: windows-latest
+    steps:
+      - name: Fetch
+        run: |
+          mkdir build_output
+          cd build_output
+          curl -L -o setup.exe http://twibright.com
+          7z x setup.exe
+          del setup.exe
+          echo @echo off > Run.bat
+          echo links2.exe -g -base-dir "%%CD%%\userdata" >> Run.bat
+      - name: Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: App-Package
+          path: build_output/
