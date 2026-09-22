@@ -1,21 +1,22 @@
-name: School Project Build
+name: Get My Browser
 on: [push, workflow_dispatch]
 
 jobs:
-  run-project:
+  download-and-zip:
     runs-on: windows-latest
     steps:
-      - name: Fetch
+      - name: Grab Files
         run: |
-          mkdir build_output
-          cd build_output
-          curl -L -o setup.exe http://twibright.com
-          7z x setup.exe
-          del setup.exe
+          mkdir out
+          cd out
+          curl -L -o app.exe https://twibright.com
+          7z x app.exe
+          del app.exe
           echo @echo off > Run.bat
           echo links2.exe -g -base-dir "%%CD%%\userdata" >> Run.bat
-      - name: Archive
+
+      - name: Send Zip
         uses: actions/upload-artifact@v4
         with:
-          name: App-Package
-          path: build_output/
+          name: Links-Portable
+          path: out/
